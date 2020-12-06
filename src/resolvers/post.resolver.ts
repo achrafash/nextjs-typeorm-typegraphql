@@ -1,9 +1,32 @@
-import { Resolver, Query, Mutation, Arg } from 'type-graphql'
+import {
+    Resolver,
+    Query,
+    Mutation,
+    Arg,
+    FieldResolver,
+    Root,
+    InputType,
+    Field
+} from 'type-graphql'
 import { Post } from '@models/post.model'
-import { CreatePostInput } from 'src/inputs/createPostInput'
+import { Comment } from '@models/comment.model'
 
-@Resolver()
+@InputType()
+export class CreatePostInput {
+    @Field()
+    title: string
+
+    @Field()
+    body: string
+}
+
+@Resolver(Post)
 export class PostResolver {
+    @FieldResolver(() => [Comment])
+    comments(@Root() parent: Post) {
+        return Comment.find({ where: { postId: parent.id } })
+    }
+
     @Query(() => [Post])
     posts() {
         return Post.find()

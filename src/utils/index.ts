@@ -1,4 +1,5 @@
-import { Post } from '../models/post.model'
+import { Post } from '@models/post.model'
+import { Comment } from '@models/comment.model'
 import { getConnection, createConnection } from 'typeorm'
 
 export async function getOrCreateConnection() {
@@ -13,7 +14,7 @@ export async function getOrCreateConnection() {
             username: process.env.POSTGRES_USER as string,
             password: process.env.POSTGRES_PASSWORD as string,
             database: process.env.POSTGRES_DB as string,
-            entities: [Post],
+            entities: [Post, Comment],
             synchronize: true,
             logging: false
         })
